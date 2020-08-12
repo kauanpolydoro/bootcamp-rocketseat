@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <title>Curso Starter</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="text" id="nome" />
+    </div>
+    <script>
+        var linkElement = document.createElement('a');
+
+        linkElement.setAttribute('href', 'http://www.google.com');
+        linkElement.setAttribute('title', 'Site do Google');
+
+        var textElement = document.createTextNode('Acessar site do Google.com');
+        linkElement.appendChild(textElement);
+
+        var containerElement = document.getElementById('app');
+        containerElement.appendChild(linkElement);
+
+        var inputElement = document.querySelector('body div input#nome');
+        containerElement.removeChild(inputElement);
+    </script>
+</body>
+
+</html>
