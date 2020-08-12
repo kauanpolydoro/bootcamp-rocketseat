@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <title>Curso Starter</title>
+</head>
+
+<body>
+    <script>
+        var sexo = 'M', idade = 22;
+
+        if (sexo === 'M' && idade >= 10) {
+            console.log('Operador AND');
+        }
+
+        if (sexo === 'M' || idade >= 999) {
+            console.log('Operador OR');
+        }
+
+        if (sexo !== 'F' || idade >= 999) {
+            console.log('Operador NOT');
+        }
+
+        //Também é possível armazenar o valor da condição diretamente em uma variavel
+        var masculino = sexo === 'M'; //false
+        console.log(masculino);
+    </script>
+</body>
+
+</html>
