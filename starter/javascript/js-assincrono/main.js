@@ -11,7 +11,7 @@ xhr.onreadystatechange = function () {
     }
 }*/
 
-//Promisse
+/*Promisse
 
 var myPromise = function () {
     return new Promise(function (resolve, reject) {
@@ -32,6 +32,15 @@ var myPromise = function () {
 }
 
 myPromise()
+    .then(function (resolve) {
+        console.log(resolve);
+    })
+    .catch(function (error) {
+        console.warn(error);
+    });
+*/
+
+axios.get('http://api.github.com/users/kauanpolydoro')
     .then(function (resolve) {
         console.log(resolve);
     })
