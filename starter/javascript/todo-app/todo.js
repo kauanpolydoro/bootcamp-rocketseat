@@ -3,11 +3,7 @@ var listElement = document.querySelector('#app ul');
 var inputElement = document.querySelector('#app input');
 var buttonElement = document.querySelector('#app button');
 
-var todos = [
-    'Fazer café',
-    'Estudar JavaScript',
-    'Finalizar o módulo todo-app'
-];
+var todos = JSON.parse(localStorage.getItem('todo_list')) || [];
 
 function renderTodos() {
 
@@ -42,6 +38,7 @@ function addTodo() {
     todos.push(todoText);
     inputElement.value = '';
     renderTodos();
+    saveToStorage();
 }
 
 buttonElement.onclick = addTodo;
@@ -49,4 +46,9 @@ buttonElement.onclick = addTodo;
 function deleteTodo(position) {
     todos.splice(position, 1);
     renderTodos();
+    saveToStorage();
+}
+
+function saveToStorage() {
+    localStorage.setItem('todo_list', JSON.stringify(todos));
 }
