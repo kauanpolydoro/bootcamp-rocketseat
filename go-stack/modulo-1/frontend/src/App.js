@@ -1,27 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Header from './components/Header'
 
 /** Conceitos do React:
  * Componente
  * Propriedade
- * Estado
+ * Estado & Imutabilidade
  */
 
 function App() {
+
+    /**
+     * useState retorna um array com 2 posições
+    
+     1. Variável com seu valor inicial
+     2. Função para atualizarmos esse valor
+
+     */
+
+    const [projects, setProjects] = useState(['Desenvolvimento de app', 'Front-end web']);
+
+    function handleAddProject() {
+        setProjects([...projects, `Novo projeto ${Date.now()}`]);
+    }
+
     return (
         <>
-            <Header title="Homepage">
-                <ul>
-                    <li>Homepage</li>
-                    <li>Projetcs</li>
-                </ul>
-            </Header>
-            <Header title="Projects">
-                <ul>
-                    <li>Login</li>
-                </ul>
-            </Header>
+            <Header title="Projects" />
+            <ul>
+                {projects.map(project => <li key={project}>{project}</li>)}
+            </ul>
+
+            <button type="button" onClick={handleAddProject}>Adicionar projeto</button>
         </>
     );
 }
