@@ -1,3 +1,6 @@
 [submodule "go-stack/modulo-1/desafios/desafio-conceitos-nodejs"]
 	path = go-stack/modulo-1/desafios/desafio-conceitos-nodejs
 	url = https://github.com/kauanpolydoro/desafio-conceitos-nodejs.git
+[submodule "go-stack/modulo-1/desafios/desafio-conceitos-reactjs"]
+	path = go-stack/modulo-1/desafios/desafio-conceitos-reactjs
+	url = https://github.com/kauanpolydoro/desafio-conceitos-reactjs.git
