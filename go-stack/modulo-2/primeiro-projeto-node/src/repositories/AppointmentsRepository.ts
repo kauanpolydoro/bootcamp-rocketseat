@@ -16,6 +16,10 @@ class AppointmentsRepository {
         return findAppointment || null;
     }
 
+    public listAll(): Appointment[] {
+        return this.appointments;
+    }
+
     public create(provider: string, date: Date): Appointment {
         const appointment = new Appointment(provider, date);
 

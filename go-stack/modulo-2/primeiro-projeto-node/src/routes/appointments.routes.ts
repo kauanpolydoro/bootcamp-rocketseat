@@ -6,7 +6,13 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository';
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
 
-appointmentsRouter.use('/', (request, response) => {
+appointmentsRouter.get('/', (request, response) => {
+    const appointments = appointmentsRepository.listAll();
+
+    return response.json(appointments);
+});
+
+appointmentsRouter.post('/', (request, response) => {
     const { provider, date } = request.body;
 
     const parsedDate = startOfHour(parseISO(date));
