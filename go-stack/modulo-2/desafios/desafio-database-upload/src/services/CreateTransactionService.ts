@@ -32,7 +32,7 @@ class CreateTransactionService {
 
     const balance = await transactionRepository.getBalance();
 
-    if (balance.total - data.value && data.type === 'outcome') {
+    if (balance.total < data.value && data.type === 'outcome') {
       throw new AppError(
         'You cant create a outcome transaction without a valid balance',
       );
