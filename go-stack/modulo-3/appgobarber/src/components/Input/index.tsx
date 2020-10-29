@@ -1,8 +1,7 @@
 import React from 'react';
 import { TextInputProps } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
 
-import { Container, TextInput } from './styles';
+import { Container, TextInput, Icon } from './styles';
 
 interface IInputProps extends TextInputProps {
   name: string;
