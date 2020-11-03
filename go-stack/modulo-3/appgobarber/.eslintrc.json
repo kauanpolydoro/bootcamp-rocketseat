@@ -30,6 +30,8 @@
     "react-hooks/exhaustive-deps": "warn",
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/ban-types": "off",
+    "no-unused-expressions": "off",
     "react/prop-types": "off",
     "no-use-before-define": "off",
     "react/jsx-filename-extension": [
