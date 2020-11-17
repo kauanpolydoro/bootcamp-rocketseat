@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs';
 
 import AppError from '../../../shared/errors/AppError';
 
-import User from '../entities/User';
+import User from '../typeorm/entities/User';
 
 interface Request {
     name: string;
