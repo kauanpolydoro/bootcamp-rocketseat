@@ -11,7 +11,7 @@ interface IRequest {
     password: string;
 }
 
-injectable();
+@injectable()
 class CreateUserService {
     constructor(
         @inject('UsersRepository')
