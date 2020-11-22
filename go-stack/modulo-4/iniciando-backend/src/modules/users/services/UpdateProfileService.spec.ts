@@ -117,8 +117,6 @@ describe('UpdateProfile', () => {
                 user_id: 'non-existing-user',
                 name: 'Foo Bar',
                 email: 'johndoe@example.com',
-                old_password: 'wrong-old-password',
-                password: '654321',
             }),
         ).rejects.toBeInstanceOf(AppError);
     });
