@@ -7,14 +7,27 @@ app.use(express.json());
 
 const customers = [];
 
-app.post('/account', (request, response) =>
-{
+function verifyIfExistsAccountCPF(request, response, next) {
+  const { cpf } = request.headers;
+
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  if (!customer) {
+    return response.status(404).json({ error: 'Customer not found' });
+  }
+
+  request.customer = customer;
+
+  return next();
+
+}
+
+app.post('/account', (request, response) => {
   const { cpf, name } = request.body;
 
   const customerAlreadyExists = customers.some(customer => customer.cpf === cpf);
 
-  if (customerAlreadyExists)
-  {
+  if (customerAlreadyExists) {
     return response.status(400).json({ error: 'Customer already exists' });
   }
 
@@ -29,20 +42,11 @@ app.post('/account', (request, response) =>
 
 });
 
-app.get('/statement', (request, response) =>
-{
+app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
 
-  const { cpf } = request.headers;
+  const { customer } = request
 
-  const customer = customers.find(customer => customer.cpf === cpf);
-
-  if (!customer)
-  {
-    return response.status(404).json({ error: 'Customer not found' });
-  }
-
-  if (!customer.statement.length)
-  {
+  if (!customer.statement.length) {
     return response.status(204).send();
   }
 
@@ -50,7 +54,6 @@ app.get('/statement', (request, response) =>
 
 })
 
-app.listen(3333, () =>
-{
+app.listen(3333, () => {
   console.log('✔ Listen on port 3333');
 });
