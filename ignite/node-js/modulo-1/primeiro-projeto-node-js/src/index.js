@@ -7,12 +7,14 @@ app.use(express.json());
 
 const customers = [];
 
-function verifyIfExistsAccountCPF(request, response, next) {
+function verifyIfExistsAccountCPF(request, response, next)
+{
   const { cpf } = request.headers;
 
   const customer = customers.find(customer => customer.cpf === cpf);
 
-  if (!customer) {
+  if (!customer)
+  {
     return response.status(404).json({ error: 'Customer not found' });
   }
 
@@ -22,12 +24,14 @@ function verifyIfExistsAccountCPF(request, response, next) {
 
 }
 
-app.post('/account', (request, response) => {
+app.post('/account', (request, response) =>
+{
   const { cpf, name } = request.body;
 
   const customerAlreadyExists = customers.some(customer => customer.cpf === cpf);
 
-  if (customerAlreadyExists) {
+  if (customerAlreadyExists)
+  {
     return response.status(400).json({ error: 'Customer already exists' });
   }
 
@@ -42,11 +46,13 @@ app.post('/account', (request, response) => {
 
 });
 
-app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
+app.get('/statement', verifyIfExistsAccountCPF, (request, response) =>
+{
 
   const { customer } = request
 
-  if (!customer.statement.length) {
+  if (!customer.statement.length)
+  {
     return response.status(204).send();
   }
 
@@ -54,7 +60,27 @@ app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
 
 })
 
-app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
+function getBalance(statement)
+{
+
+  const balance = statement.reduce((accumulator, operation) =>
+  {
+    if (operation.type === 'credit')
+    {
+      return accumulator + operation.amount;
+    } else
+    {
+      return accumulator - operation.amount;
+    }
+
+  }, 0);
+
+  return balance;
+
+}
+
+app.post('/deposit', verifyIfExistsAccountCPF, (request, response) =>
+{
   const { description, amount } = request.body;
 
   const { customer } = request;
@@ -71,6 +97,32 @@ app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
   return response.status(201).send();
 })
 
-app.listen(3333, () => {
+app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) =>
+{
+
+  const { amount } = request.body;
+  const { customer } = request;
+
+  const balance = getBalance(customer.statement);
+
+  if (balance < amount)
+  {
+    return response.status(400).json({ error: 'Insufficient funds' });
+  }
+
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: 'debit'
+  }
+
+  customer.statement.push(statementOperation);
+
+  return response.status(201).send();
+
+})
+
+app.listen(3333, () =>
+{
   console.log('✔ Listen on port 3333');
 });
