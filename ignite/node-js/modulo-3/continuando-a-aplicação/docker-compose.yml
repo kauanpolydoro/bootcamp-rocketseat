@@ -1,9 +1,7 @@
-version: "3.7"
-
-# docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+version: "3.9"
 
 services:
-    database_ignite:
+    database:
         image: postgres
         container_name: database_ignite
         restart: always
@@ -15,21 +13,19 @@ services:
             - POSTGRES_DB=rentx
         volumes:
             - pgdata:/data/postgres
-        networks:
-            - app-network
     app:
         build: .
         container_name: rentx
+        restart: always
         ports:
             - 3333:3333
+            - 9229:9229
         volumes:
             - .:/usr/app
-        networks:
-            - app-network
-
-networks:
-    app-network:
-        driver: bridge
+        links:
+            - database
+        depends_on:
+            - database
 
 volumes:
     pgdata:

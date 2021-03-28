@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(router);
 
-app.use((err: Error, _: Request, response: Response) => {
+app.use((err: Error, _: Request, response: Response, next: NextFunction) => {
     if (err instanceof AppError) {
         return response.status(err.statusCode).json({ message: err.message });
     }
@@ -26,6 +26,8 @@ app.use((err: Error, _: Request, response: Response) => {
         message: "Internal server error",
         error: err.message,
     });
+
+    return next();
 });
 
 app.listen(3333, () => console.log("✔ Server started on port 3333!"));
