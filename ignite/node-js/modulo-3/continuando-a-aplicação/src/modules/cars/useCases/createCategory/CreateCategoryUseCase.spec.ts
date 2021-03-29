@@ -1,7 +1,7 @@
-describe("Criar categoria", () => {
-    it("should be able to create a category", () => {
-        const soma = 2 + 2;
+import { CreateCategoryUseCase } from "./CreateCategoryUseCase";
 
-        expect(soma).toBe(4);
+describe("Create category", () => {
+    it("should be able to create a new category", () => {
+        const createCategory = new CreateCategoryUseCase();
     });
 });
