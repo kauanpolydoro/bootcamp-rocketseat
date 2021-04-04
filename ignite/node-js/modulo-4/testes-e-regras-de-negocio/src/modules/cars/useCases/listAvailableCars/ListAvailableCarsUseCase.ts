@@ -1,17 +1,21 @@
 import { inject, injectable } from "tsyringe";
 
-import { IListCarDTO } from "@modules/cars/dtos/IListCarDTO";
+import { IListAvailableCarsDTO } from "@modules/cars/dtos/IListAvailableCarsDTO";
 import { Car } from "@modules/cars/infra/typeorm/entities/Car";
 import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 
 @injectable()
-class ListCarsUseCase {
+class ListAvailableCarsUseCase {
     constructor(
         @inject("CarsRepository")
         private carsRepository: ICarsRepository
     ) {}
 
-    async execute({ category_id, brand, name }: IListCarDTO): Promise<Car[]> {
+    async execute({
+        category_id,
+        brand,
+        name,
+    }: IListAvailableCarsDTO): Promise<Car[]> {
         const cars = this.carsRepository.findAllAvailable({
             category_id,
             brand,
@@ -22,4 +26,4 @@ class ListCarsUseCase {
     }
 }
 
-export { ListCarsUseCase };
+export { ListAvailableCarsUseCase };
