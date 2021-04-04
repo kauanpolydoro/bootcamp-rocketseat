@@ -1,4 +1,4 @@
-import { NextFunction, Request } from "express";
+import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import { UsersRepository } from "@modules/accounts/infra/typeorm/repositories/UsersRepository";
@@ -10,7 +10,7 @@ interface IPayload {
 
 export async function ensureAuthenticated(
     request: Request,
-    response: Response,
+    _: Response,
     next: NextFunction
 ): Promise<void> {
     const authHeader = request.headers.authorization;
@@ -38,7 +38,7 @@ export async function ensureAuthenticated(
             id: user_id,
         };
 
-        next();
+        return next();
     } catch {
         throw new AppError("Invalid token", 401);
     }
