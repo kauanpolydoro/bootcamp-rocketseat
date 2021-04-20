@@ -2,7 +2,6 @@ import { verify, sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 import auth from "@config/auth";
-import { UserTokens } from "@modules/accounts/infra/typeorm/entities/UserTokens";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
