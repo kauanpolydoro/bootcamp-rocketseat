@@ -20,8 +20,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     const user = await fauna.query<User>(
       q.Get(
-        q.Index('user_by_email'),
-        q.Casefold(session.user.email)
+        q.Match(
+          q.Index('user_by_email'),
+          q.Casefold(session.user.email)
+        )
       )
     );
 
