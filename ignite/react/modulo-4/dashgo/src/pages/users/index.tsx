@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { RiAddLine, RiPencilLine, } from "react-icons/ri";
-import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, useBreakpointValue, Spinner } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, Spinner } from "@chakra-ui/react";
 import { useQuery } from 'react-query'
 
 import { Header } from "../../components/Header";
@@ -13,7 +13,21 @@ export default function UserList() {
   const { data, isLoading, error } = useQuery('users', async () => {
     const response = await fetch('http://localhost:3000/api/users');
     const data = await response.json();
-    return data;
+
+    const users = data.users.map(user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }),
+      }
+    });
+
+    return users;
   });
 
   const isWideVersion = useBreakpointValue({
@@ -66,39 +80,43 @@ export default function UserList() {
                 <>
                   <Table colorScheme="whiteAlpha">
                     <Thead>
-                      <tr>
+                      <Tr>
                         <Th px={["4", "4", "6"]} color="gray.300" w="8">
                           <Checkbox colorScheme="pink" />
                         </Th>
                         <Th>Usuário</Th>
                         {isWideVersion && <Th>Data de cadastro</Th>}
                         <Th w="8" />
-                      </tr>
+                      </Tr>
                     </Thead>
                     <Tbody>
-                      <tr>
-                        <Td px={["4", "4", "6"]}>
-                          <Checkbox colorScheme="pink" />
-                        </Td>
-                        <Td>
-                          <Box>
-                            <Text fontWeight="bold">Kauan Polydoro</Text>
-                            <Text fontSize="sm" color="gray.300">kauan.polydoro@email.com</Text>
-                          </Box>
-                        </Td>
-                        {isWideVersion && <Td>04 de Abril, 2021</Td>}
-                        <Td>
-                          <Button
-                            as="a"
-                            size="sm"
-                            fontSize="sm"
-                            colorScheme="purple"
-                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                          >
-                            Editar
-                          </Button>
-                        </Td>
-                      </tr>
+                      {data.map(user => {
+                        return (
+                          <Tr key={user.id}>
+                            <Td px={["4", "4", "6"]}>
+                              <Checkbox colorScheme="pink" />
+                            </Td>
+                            <Td>
+                              <Box>
+                                <Text fontWeight="bold">{user.name}</Text>
+                                <Text fontSize="sm" color="gray.300">{user.email}</Text>
+                              </Box>
+                            </Td>
+                            {isWideVersion && <Td>{user.createdAt}</Td>}
+                            <Td>
+                              <Button
+                                as="a"
+                                size="sm"
+                                fontSize="sm"
+                                colorScheme="purple"
+                                leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                              >
+                                Editar
+                              </Button>
+                            </Td>
+                          </Tr>
+                        )
+                      })}
                     </Tbody>
                   </Table >
 
