@@ -2,6 +2,8 @@ import axios, { AxiosError } from 'axios';
 import { parseCookies, setCookie } from 'nookies';
 
 let cookies = parseCookies();
+let isRefreshing = false;
+let failedRequestQueue = [];
 
 const api = axios.create({
   baseURL: 'http://localhost:3333/',
@@ -18,22 +20,51 @@ api.interceptors.response.use(response => {
       cookies = parseCookies();
       const { 'nextauth.refreshToken': refreshToken } = cookies;
 
-      api.post('/refresh', {
-        refreshToken
-      }).then(response => {
-        const { token } = response.data;
+      const originalConfig = error.config;
 
-        setCookie(undefined, 'nextauth.token', token, {
-          maxAge: 60 * 60, // 60 minutos
-          path: '/'
+      if (!isRefreshing) {
+
+        isRefreshing = true;
+
+        api.post('/refresh', {
+          refreshToken
+        }).then(response => {
+          const { token } = response.data;
+
+          setCookie(undefined, 'nextauth.token', token, {
+            maxAge: 60 * 60, // 60 minutos
+            path: '/'
+          });
+
+          setCookie(undefined, 'nextauth.refreshToken', response.data.refreshToken, {
+            maxAge: 60 * 60, // 60 minutos
+            path: '/'
+          });
+
+          api.defaults.headers['Authorization'] = `Bearer ${token}`
+
+          failedRequestQueue.forEach(request => request.onSuccess(token))
+          failedRequestQueue = [];
+
+        }).catch(err => {
+          failedRequestQueue.forEach(request => request.onFailure(err))
+          failedRequestQueue = [];
+        }).finally(() => {
+          isRefreshing = false;
+        })
+      }
+
+      return new Promise((resolve, reject) => {
+        failedRequestQueue.push({
+          onSuccess: (token: string) => {
+            originalConfig.headers['Authorization'] = `Bearer ${token}`
+
+            resolve(api(originalConfig));
+          },
+          onFailure: (err: AxiosError) => {
+            reject(err)
+          }
         });
-
-        setCookie(undefined, 'nextauth.refreshToken', response.data.refreshToken, {
-          maxAge: 60 * 60, // 60 minutos
-          path: '/'
-        });
-
-        api.defaults.headers['Authorization'] = `Bearer ${token}`
       })
 
     } else {
