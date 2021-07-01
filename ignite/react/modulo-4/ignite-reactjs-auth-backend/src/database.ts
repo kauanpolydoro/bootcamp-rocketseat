@@ -12,6 +12,12 @@ export function seedUserStore() {
     roles: ['administrator']
   })
 
+  users.set('kauan', {
+    password: '123',
+    permissions: ['users.list', 'users.create', 'metrics.list'],
+    roles: ['administrator']
+  })
+
   users.set('estagiario@rocketseat.team', {
     password: '123456',
     permissions: ['users.list', 'metrics.list'],
