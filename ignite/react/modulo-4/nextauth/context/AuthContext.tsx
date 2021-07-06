@@ -6,7 +6,7 @@ import Router from 'next/router';
 type User = {
   email: string;
   permissions: string[];
-  roles: [];
+  roles: string[];
 }
 
 type SignInCredentials = {
