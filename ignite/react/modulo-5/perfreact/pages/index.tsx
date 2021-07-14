@@ -66,7 +66,7 @@ export default function Home() {
       <SearchResults
         results={results?.data}
         totalPrice={results.totalPrice}
-        onAddToWishList={addToWishlist}
+        onAddToWishlist={addToWishlist}
       />
     </div>
   )
