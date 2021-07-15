@@ -40,7 +40,7 @@ export default function Home() {
 
     const totalPrice = data.reduce((accumulator, current) => {
       return accumulator += current.price
-    });
+    }, 0);
 
     setResults({ totalPrice, data: products });
 
