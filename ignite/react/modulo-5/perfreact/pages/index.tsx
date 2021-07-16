@@ -6,6 +6,13 @@ type Results = {
   data: any[]
 }
 
+type Product = {
+  id: number;
+  price: number;
+  priceFormatted: string;
+  title: string;
+}
+
 export default function Home() {
 
   const [search, setSearch] = useState('');
@@ -22,7 +29,7 @@ export default function Home() {
     }
 
     const response = await fetch(`http://localhost:3333/products?q=${search}`);
-    const data = await response.json();
+    const data = await response.json() as Product[];
 
     const formatter = new Intl.NumberFormat('pt-BR', {
       style: 'currency',
